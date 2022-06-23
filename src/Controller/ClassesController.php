@@ -13,29 +13,62 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ClassesController extends AbstractController
 {
+    private $classRepo;
     private $em;
-    public function __construct(ClassesRepository $repo)
+
+    public function __construct(ClassesRepository $classRepo, EntityManagerInterface $em)
     {
-       $em = $repo;
+      $this->em = $em;
+      $this->classRepo= $classRepo;
+      
     }
 
-    #[Route('/create', name: 'Create_Class')]
+    public function index()
+    {
+       $classesdata =  $this->classRepo->findAll();
+    }
+
+    #[Route('/create', name: 'create')]
     public function create(Request $request): Response
     {
-        $classes = new Classes();
-      // $classes =  $this->em->findAll();
 
-       $form = $this->createForm(ClassFormType::class,$classes);
+       $form = $this->createForm(ClassFormType::class);
 
       $form->handleRequest($request);
 
       if($form->isSubmitted() && $form->isValid())
       {
-        dd($classes);
+        $newClass = $form->getData();
+        $this->em->persist($newClass);
+        $this->em->flush();
+        return $this->redirectToRoute('create');
       }
 
+      $classesdata =  $this->classRepo->findAll();
+
        return $this->render('classes/AddClass.html.twig',[
-        'form' => $form->createView()
+        'form' => $form->createView(),
+        'class_data' => $classesdata,
+       ]);
+
+    }
+
+   #[Route('/deletedata/{id}', name: 'deletedata')]
+    public function DeleteClass($id)
+    {
+        $classdata =  $this->classRepo->find($id);
+        $classesdata =  $this->classRepo->findAll();
+
+        $this->classRepo->remove($classdata);
+        $this->em->flush();
+        return $this->redirectToRoute('create');
+        
+        $form = $this->createForm(ClassFormType::class);
+
+       return $this->render('classes/AddClass.html.twig',[
+        'form' => $form->createView(),
+        'class_data' => $classesdata,
+
        ]);
     }
 }

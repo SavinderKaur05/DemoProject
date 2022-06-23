@@ -1,10 +1,60 @@
-#sidebar {
-    min-width: 250px;
-    max-width: 250px;
-    background: #7386D5;
-    color: #fff;
-    height: 102vh;
-    transition: all 0.6s cubic-bezier(0.945, 0.020, 0.270, 0.665);
-    transform-origin: center left; /* Set the transformed position of sidebar to center left side. */
+body {
+  margin: 0;
+}
+
+/* Style the header */
+.header {
+  background-color: #f1f1f1;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Create three unequal columns that floats next to each other */
+.column {
+  float: left;
+  padding: 10px;
+}
+
+/* Left and right column */
+.column.side {
+  width: 15%;
+  background-color: aliceblue;
+  height:81.5vh;
+}
+
+/* Middle column */
+.column.middle {
+  width: 85%;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column.side, .column.middle {
+    width: 100%;
+  }
+}
+
+ul
+{
+    text-align: left;
+}
+
+ul li a 
+{
+    text-decoration: none;
+    color:black;
+}
+
+
+ul li a:hover
+{
+    color:hsl(215, 38%, 73%);
+    text-decoration: none;
+}
+
+.form
+{
+    padding-top:20px;
+    margin-left: 30px;
 }
 

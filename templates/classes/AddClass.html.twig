@@ -1,16 +1,42 @@
  {% extends 'base.html.twig' %}
 
-{% block title %}Class{% endblock %}
+{% block title %}Add Class{% endblock %}
 
-{% block Content %}
-  
-    <div class="col-lg-10 col-sm-10 col-md-10">
+{% block MainContent %}
   <h1 style="text-align:center; ">Add Class</h1>
+  <div class="form">
   {{ form_start(form) }}
-      
-       
+      {{ form_widget(form) }}
+    <div class="form-group" style="padding-top:20px;">
+     <button type="submit" class="btn btn-info">Submit</button>
+    </div>
    {{ form_end(form) }}
+   </div>
 
-  </div>
+   <div class="container" style="margin-left:20px;padding-top:30px;">       
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Class Name</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+     {% for data in class_data %}
+        
+      <tr>
+        <td>{{data.Name}}</td>
+        <td><button type="button"  class="btn btn-success" value="Edit" /><a href="/editdata/{{ data.id }}">Edit</a></td>
+        <td><button type="button" class="btn btn-warning"><a href="/deletedata/{{ data.id }}">Delete</a></button></td>
+      </tr>
+
+     {% endfor %}
+
+
+    </tbody>
+  </table>
+</div>
+
 
 {% endblock %}

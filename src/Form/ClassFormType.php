@@ -17,13 +17,9 @@ class ClassFormType extends AbstractType
             ->add('Name',TextType::class,[
                 'attr' => [
                     'placeholder' => 'Enter class name..',
-                    'class' => 'custom_class'
-                ]
-            ])
+                    'class' => 'custom_class',
+                    'style' => 'width:300px;height:40px;',
 
-            ->add('Insert', SubmitType::class,[
-                'attr' => [
-                    'class'=> 'btn btn-success',
                 ]
             ])
         ;
