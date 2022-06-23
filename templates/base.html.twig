@@ -18,12 +18,14 @@
 
     {% block body %}
 
-      <div class="container-fluid">
+  
         <div class="row">
             {% block navbar %}
-             <nav id="sidebar">
+             <nav id="sidebar" class="col-lg-2 col-sm-2 col-md-2">
                <ul>
                  <li><a href="/create">Add Class</a></li>
+                 <li><a href="/students">Add Students</a></li>
+                 <li><a href="/employees">Add Employe</a></li>
                </ul>
              </nav>
             {% endblock %} 
@@ -32,7 +34,7 @@
           
             {% endblock %}
         </div>
-     </div>
+ 
 
     {% endblock %}
 

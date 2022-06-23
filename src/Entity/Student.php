@@ -16,9 +16,13 @@ class Student
     #[ORM\Column(type: 'string', length: 255)]
     private $Admission_Number;
 
+    #[ORM\OneToOne(inversedBy: 'student', targetEntity: Users::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $userId;
+
     #[ORM\ManyToOne(targetEntity: Classes::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $ClassId;
+    private $classId;
 
     public function getId(): ?int
     {
@@ -37,14 +41,26 @@ class Student
         return $this;
     }
 
-    public function getClassId(): ?Classes
+    public function getUserId(): ?Users
     {
-        return $this->ClassId;
+        return $this->userId;
     }
 
-    public function setClassId(?Classes $ClassId): self
+    public function setUserId(Users $userId): self
     {
-        $this->ClassId = $ClassId;
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    public function getClassId(): ?Classes
+    {
+        return $this->classId;
+    }
+
+    public function setClassId(?Classes $classId): self
+    {
+        $this->classId = $classId;
 
         return $this;
     }
