@@ -23,16 +23,22 @@ class ClassesController extends AbstractController
       
     }
 
-    public function index()
-    {
-       $classesdata =  $this->classRepo->findAll();
-    }
+   // #[Route('/index', name: 'index')]
+   //  public function index()
+   //  {
+   //     $form = $this->createForm(ClassFormType::class);
+   //     $classesdata =  $this->classRepo->findAll();
+
+   //     return $this->render('classes/AddClass.html.twig',[
+   //      'form' => $form->createView(),
+   //      'class_data' => $classesdata,
+   //      ]);
+   //  }
 
     #[Route('/create', name: 'create')]
     public function create(Request $request): Response
     {
-
-       $form = $this->createForm(ClassFormType::class);
+      $form = $this->createForm(ClassFormType::class);
 
       $form->handleRequest($request);
 
@@ -65,10 +71,31 @@ class ClassesController extends AbstractController
         
         $form = $this->createForm(ClassFormType::class);
 
-       return $this->render('classes/AddClass.html.twig',[
+        return $this->render('classes/AddClass.html.twig',[
         'form' => $form->createView(),
         'class_data' => $classesdata,
 
        ]);
+    }
+
+    #[Route('/updatedata/{id}',name:'updatedata')]
+    public function UpdateClass($id,Request $request)
+    {
+        $classdata =  $this->classRepo->find($id);
+        $classesdata =  $this->classRepo->findAll();
+        $form = $this->createForm(ClassFormType::class,$classdata);
+        $form->handleRequest($request);
+
+      if($form->isSubmitted() && $form->isValid())
+      {
+         $classdata->setName($form->get('Name')->getdata());
+         $this->em->flush();
+      }
+        return $this->render('classes/AddClass.html.twig',[
+        'form' => $form->createView(),
+        'class_data' => $classesdata,
+
+       ]);
+
     }
 }
