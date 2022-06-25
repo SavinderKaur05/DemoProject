@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+
 class StudentFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -19,9 +20,10 @@ class StudentFormType extends AbstractType
             ->add('Admission_Number',TextType::class,
             [
             'label'=>'Admission Number',
-                'attr'=>[
+                'attr'=>array(
                     'style'=>'width:300px;height:40px;'
-                ]
+                ),
+                 'required'=>false
             ])
              
             ->add("inputName",TextType::class, array("mapped"=>false, "label"=>'Student Name'))

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\StudentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 class Student
@@ -14,6 +15,7 @@ class Student
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+     #[Assert\NotBlank(message:'Admission Number cannot be empty')]
     private $Admission_Number;
 
     #[ORM\OneToOne(inversedBy: 'student', targetEntity: Users::class, cascade: ['persist', 'remove'])]

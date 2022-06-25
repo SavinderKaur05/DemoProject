@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+
 class EmployeeFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -20,9 +21,11 @@ class EmployeeFormType extends AbstractType
            ->add('EmployeeCode',TextType::class,
             [
             'label'=>'Employee Code',
-                'attr'=>[
-                    'style'=>'width:300px;height:40px;'
-                ]
+                'attr'=>array(
+                    'style'=>'width:300px;height:40px;',
+                    'required'=>false
+                ),
+                 'required'=>false
             ])
              
             ->add("inputName",TextType::class, array("mapped"=>false, "label"=>'Employee Name'))

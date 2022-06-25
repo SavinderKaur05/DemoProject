@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Employee;
+use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * @extends ServiceEntityRepository<Employee>
@@ -16,8 +19,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EmployeeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $em;
+    public function __construct(ManagerRegistry $registry,EntityManagerInterface $em)
     {
+        $this->em=$em;
         parent::__construct($registry, Employee::class);
     }
 
@@ -55,6 +60,35 @@ class EmployeeRepository extends ServiceEntityRepository
         $resultSet = $stmt->executeQuery();
 
          return $resultSet->fetchAllAssociative();
+    }
+
+      public function SaveEmployee(Employee $employee,string $name,string $role)
+    {
+        try
+        {
+    
+       $this->getEntityManager()->beginTransaction();
+       $user = new Users();
+       $user->setUserName($name."@123");
+       $user->setPassword("123");
+       $user->setRole($role);
+       $user->setName($name);
+       $user->setUserType("Employee");
+
+         $this->em->persist($user);
+         $this->em->flush();
+
+         $employee->setUserId($user);
+        $this->em->persist($employee);
+         $this->em->flush();
+         
+         $this->getEntityManager()->commit();
+        }
+        catch(Exception $ex)
+        {
+          $this->getEntityManager()->rollback();
+        }
+
     }
 
 //    /**

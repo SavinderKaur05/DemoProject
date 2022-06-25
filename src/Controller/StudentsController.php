@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
 
+
 class StudentsController extends AbstractController
 {
      private $StudentRepo;
@@ -43,40 +44,22 @@ class StudentsController extends AbstractController
     #[Route('/createstudent', name: 'createstudent')]
     public function create(Request $request): Response
     {
-      $form = $this->createForm(StudentFormType::class);
+      $Student = new Student();
+      $form = $this->createForm(StudentFormType::class,$Student);
 
       $form->handleRequest($request);
-       $student=new Student();
-
+      
       if($form->isSubmitted() && $form->isValid())
       {
-        $student->setAdmissionNumber($form->get('Admission_Number')->getData());
-        $student->setClassId($form->get('classId')->getdata());
-        
-        $user=new Users();
-        $user->setName($form->get('inputName')->getData());
-        $user->setPassword($form->get('inputName')->getData().'@123');
-        $user->setRole('Student');
-        $user->setUserType('Student');
-        $user->setUserName($form->get('inputName')->getData().'@1');
-        
-        // //User Created 
-        $this->em->persist($user);
-        $this->em->flush();
+        $student = $form->getData();
+        $studentname= $form->get('inputName')->getData();
+         $this->StudentRepo->SaveStudent($student,$studentname);
 
-        $student->setUserId($user);
-
-        //student Created
-        $this->em->persist($student);
-        $this->em->flush();
-
-
-        return $this->redirectToRoute('createstudent');
+          return $this->redirectToRoute('createstudent');
       }
+          $studentsdata =  $this->StudentRepo->FindStudentDataWithOtherFeilds();
 
-        $studentsdata =  $this->StudentRepo->FindStudentDataWithOtherFeilds();
-
-       return $this->render('students/AddStudent.html.twig',[
+        return $this->render('students/AddStudent.html.twig',[
         'form' => $form->createView(),
         'student_data' => $studentsdata,
        ]);

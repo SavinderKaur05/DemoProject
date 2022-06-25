@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\ClassesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ClassesRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClassesRepository::class)]
 class Classes
@@ -14,6 +15,7 @@ class Classes
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+   #[Assert\NotBlank(message:'Name cannot be empty')]
     private $Name;
 
     public function getId(): ?int

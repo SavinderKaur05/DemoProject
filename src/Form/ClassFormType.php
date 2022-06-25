@@ -15,13 +15,14 @@ class ClassFormType extends AbstractType
     {
         $builder
             ->add('Name',TextType::class,[
-                'attr' => [
+                'attr' => array(
                     'placeholder' => 'Enter class name..',
                     'class' => 'custom_class',
                     'style' => 'width:300px;height:40px;',
-
+                ),
+                'required'=>false
                 ]
-            ])
+            )
         ;
     }
 

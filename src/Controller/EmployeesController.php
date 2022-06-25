@@ -29,34 +29,19 @@ class EmployeesController extends AbstractController
     #[Route('/createemployee', name: 'createemployee')]
     public function create(Request $request): Response
     {
-      $form = $this->createForm(EmployeeFormType::class);
+       $Employee = new Employee();
+      $form = $this->createForm(EmployeeFormType::class,$Employee);
 
       $form->handleRequest($request);
-       $employee=new Employee();
-
+      
       if($form->isSubmitted() && $form->isValid())
       {
-        $employee->setEmployeeCode($form->get('EmployeeCode')->getData());
-        
-        $user=new Users();
-        $user->setName($form->get('inputName')->getData());
-        $user->setPassword($form->get('inputName')->getData().'@123');
-        $user->setRole($form->get('role')->getData());
-        $user->setUserType('Employee');
-        $user->setUserName($form->get('inputName')->getData().'@1');
-        
-        // //User Created 
-        $this->em->persist($user);
-        $this->em->flush();
+        $employee = $form->getData();
+        $name= $form->get('inputName')->getData();
+        $role=$form->get('role')->getData();
+         $this->EmployeeRepo->SaveEmployee($employee,$name,$role);
 
-        $employee->setUserId($user);
-
-        //student Created
-        $this->em->persist($employee);
-        $this->em->flush();
-
-
-        return $this->redirectToRoute('createemployee');
+          return $this->redirectToRoute('createemployee');
       }
 
         $employeesdata =  $this->EmployeeRepo->FindEmployeeDataWithOtherFeilds();

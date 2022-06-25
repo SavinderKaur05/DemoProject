@@ -6,8 +6,10 @@ use App\Entity\Classes;
 use App\Entity\Student;
 use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * @extends ServiceEntityRepository<Student>
@@ -19,8 +21,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class StudentRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $em;
+    public function __construct(ManagerRegistry $registry,EntityManagerInterface $em)
     {
+        $this->em=$em;
         parent::__construct($registry, Student::class);
     }
 
@@ -44,6 +48,7 @@ class StudentRepository extends ServiceEntityRepository
 
     public function FindStudentDataWithOtherFeilds()
     {
+
         $conn = $this->getEntityManager()->getConnection(); 
         // "SELECT students.StudentId,students.ClassId, Students.Admission_Number, users.username,
         //  classtable.Name FROM users JOIN students ON users.UserId=students.UserId JOIN classtable 
@@ -60,6 +65,33 @@ class StudentRepository extends ServiceEntityRepository
          return $resultSet->fetchAllAssociative();
     }
 
+    public function SaveStudent(Student $student,string $name)
+    {
+        try
+        {
+      $this->getEntityManager()->beginTransaction();
+       $user = new Users();
+       $user->setUserName($name."@123");
+       $user->setPassword("123");
+       $user->setRole("Student");
+       $user->setName($name);
+       $user->setUserType("Student");
+
+         $this->em->persist($user);
+         $this->em->flush();
+
+         $student->setUserId($user);
+          $this->em->persist($student);
+         $this->em->flush();
+         
+         $this->getEntityManager()->commit();
+        }
+        catch(Exception $ex)
+        {
+          $this->getEntityManager()->rollback();
+        }
+
+    }
 //    /**
 //     * @return Student[] Returns an array of Student objects
 //     */
