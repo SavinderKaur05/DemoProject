@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Employee;
+use App\Entity\Employees;
 use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,23 +10,23 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
 /**
- * @extends ServiceEntityRepository<Employee>
+ * @extends ServiceEntityRepository<Employees>
  *
- * @method Employee|null find($id, $lockMode = null, $lockVersion = null)
- * @method Employee|null findOneBy(array $criteria, array $orderBy = null)
- * @method Employee[]    findAll()
- * @method Employee[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Employees|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Employees|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Employees[]    findAll()
+ * @method Employees[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EmployeeRepository extends ServiceEntityRepository
+class EmployeesRepository extends ServiceEntityRepository
 {
     private $em;
     public function __construct(ManagerRegistry $registry,EntityManagerInterface $em)
     {
         $this->em=$em;
-        parent::__construct($registry, Employee::class);
+        parent::__construct($registry, Employees::class);
     }
 
-    public function add(Employee $entity, bool $flush = false): void
+    public function add(Employees $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -35,7 +35,7 @@ class EmployeeRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Employee $entity, bool $flush = false): void
+    public function remove(Employees $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -53,7 +53,7 @@ class EmployeeRepository extends ServiceEntityRepository
         //  classtable.Name FROM users JOIN students ON users.UserId=students.UserId JOIN classtable 
         //  on classtable.ClassId = students.ClassId;"
 
-        $sql = 'SELECT employee.Id, employee.employee_code, users.name, users.role FROM users JOIN employee ON users.Id=employee.user_id_id';
+        $sql = 'SELECT employees.Id, employees.employee_code,employees.role, employees.name, employees.employee_code FROM users JOIN employees ON users.Id=employees.user_id';
 
         $stmt = $conn->prepare($sql);
 
@@ -62,24 +62,23 @@ class EmployeeRepository extends ServiceEntityRepository
          return $resultSet->fetchAllAssociative();
     }
 
-      public function SaveEmployee(Employee $employee,string $name,string $role)
+      public function SaveEmployee(Employees $employee,string $role)
     {
         try
         {
     
        $this->getEntityManager()->beginTransaction();
        $user = new Users();
-       $user->setUserName($name."@123");
+       $user->setUserName($employee->getName()."@123");
        $user->setPassword("123");
-       $user->setRole($role);
-       $user->setName($name);
-       $user->setUserType("Employee");
 
          $this->em->persist($user);
          $this->em->flush();
-
-         $employee->setUserId($user);
+         $employee->setUser($user);
+         $employee->setRole($role);
+         
         $this->em->persist($employee);
+
          $this->em->flush();
          
          $this->getEntityManager()->commit();

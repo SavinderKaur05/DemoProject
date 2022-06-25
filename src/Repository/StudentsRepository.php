@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+namespace App\Repository;
+
 use App\Entity\Classes;
-use App\Entity\Student;
+use App\Entity\Students;
 use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,23 +14,23 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
 /**
- * @extends ServiceEntityRepository<Student>
+ * @extends ServiceEntityRepository<Students>
  *
- * @method Student|null find($id, $lockMode = null, $lockVersion = null)
- * @method Student|null findOneBy(array $criteria, array $orderBy = null)
- * @method Student[]    findAll()
- * @method Student[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Students|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Students|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Students[]    findAll()
+ * @method Students[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class StudentRepository extends ServiceEntityRepository
+class StudentsRepository extends ServiceEntityRepository
 {
-    private $em;
+   private $em;
     public function __construct(ManagerRegistry $registry,EntityManagerInterface $em)
     {
         $this->em=$em;
-        parent::__construct($registry, Student::class);
+        parent::__construct($registry, Students::class);
     }
 
-    public function add(Student $entity, bool $flush = false): void
+    public function add(Students $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -37,7 +39,7 @@ class StudentRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Student $entity, bool $flush = false): void
+    public function remove(Students $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -46,7 +48,7 @@ class StudentRepository extends ServiceEntityRepository
         }
     }
 
-    public function FindStudentDataWithOtherFeilds()
+     public function FindStudentDataWithOtherFeilds()
     {
 
         $conn = $this->getEntityManager()->getConnection(); 
@@ -54,9 +56,12 @@ class StudentRepository extends ServiceEntityRepository
         //  classtable.Name FROM users JOIN students ON users.UserId=students.UserId JOIN classtable 
         //  on classtable.ClassId = students.ClassId;"
 
-        $sql = 'SELECT student.Id,student.class_id_id, student.Admission_Number, users.user_name AS username,
-        classes.name FROM users JOIN student ON users.Id=student.user_id_id JOIN classes ON 
-        classes.Id = student.class_id_id';
+        // SELECT student.Id,student.class_id_id, student.Admission_Number,
+        // classes.name FROM users JOIN student ON users.Id=student.user_id_id JOIN classes ON 
+        // classes.Id = student.class_id_id
+
+        $sql = 'SELECT students.Id,students.name AS studentsName, students.class_id,students.Admission_Number,
+        classes.name FROM classes JOIN students ON classes.Id = students.class_id';
 
         $stmt = $conn->prepare($sql);
 
@@ -65,22 +70,34 @@ class StudentRepository extends ServiceEntityRepository
          return $resultSet->fetchAllAssociative();
     }
 
-    public function SaveStudent(Student $student,string $name)
+    public function GetStudentDataWithExtraFeilds(int $id)
+    {
+        $conn = $this->getEntityManager()->getConnection(); 
+
+       $sql='SELECT students.Id,students.class_id, students.Admission_Number 
+         FROM classes JOIN students ON classes.Id = students.class_id WHERE students.Id = '.$id.';';
+      
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+         return $resultSet->fetchAllAssociative(); 
+    }
+
+    public function SaveStudent(Students $student)
     {
         try
         {
       $this->getEntityManager()->beginTransaction();
        $user = new Users();
-       $user->setUserName($name."@123");
+       $user->setUserName($student->getName()."@123");
        $user->setPassword("123");
-       $user->setRole("Student");
-       $user->setName($name);
-       $user->setUserType("Student");
 
          $this->em->persist($user);
          $this->em->flush();
 
-         $student->setUserId($user);
+         $student->setUser($user);
           $this->em->persist($student);
          $this->em->flush();
          
@@ -92,8 +109,9 @@ class StudentRepository extends ServiceEntityRepository
         }
 
     }
+
 //    /**
-//     * @return Student[] Returns an array of Student objects
+//     * @return Students[] Returns an array of Students objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -107,7 +125,7 @@ class StudentRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Student
+//    public function findOneBySomeField($value): ?Students
 //    {
 //        return $this->createQueryBuilder('s')
 //            ->andWhere('s.exampleField = :val')

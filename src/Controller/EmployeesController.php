@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Classes;
-use App\Entity\Employee;
+use App\Entity\Employees;
 use App\Entity\Student;
 use App\Entity\Users;
-use App\Form\EmployeeFormType;
-use App\Repository\EmployeeRepository;
+use App\Form\EmployeesFormType;
+use App\Repository\EmployeesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,7 @@ class EmployeesController extends AbstractController
      private $EmployeeRepo;
      private $em;
 
-    public function __construct(EmployeeRepository $EmployeeRepo, EntityManagerInterface $em)
+    public function __construct(EmployeesRepository $EmployeeRepo, EntityManagerInterface $em)
     {
       $this->em = $em;
       $this->EmployeeRepo= $EmployeeRepo;
@@ -29,17 +29,17 @@ class EmployeesController extends AbstractController
     #[Route('/createemployee', name: 'createemployee')]
     public function create(Request $request): Response
     {
-       $Employee = new Employee();
-      $form = $this->createForm(EmployeeFormType::class,$Employee);
+       $Employee = new Employees();
+      $form = $this->createForm(EmployeesFormType::class,$Employee);
 
       $form->handleRequest($request);
       
       if($form->isSubmitted() && $form->isValid())
       {
         $employee = $form->getData();
-        $name= $form->get('inputName')->getData();
-        $role=$form->get('role')->getData();
-         $this->EmployeeRepo->SaveEmployee($employee,$name,$role);
+        $role= $form->get('role')->getData();
+      
+         $this->EmployeeRepo->SaveEmployee($employee,$role);
 
           return $this->redirectToRoute('createemployee');
       }
@@ -64,7 +64,7 @@ class EmployeesController extends AbstractController
         $this->em->flush();
         return $this->redirectToRoute('createemployee');
         
-        $form = $this->createForm(EmployeeFormType::class);
+        $form = $this->createForm(EmployeesFormType::class);
 
         return $this->render('employees/AddEmployee.html.twig',[
         'form' => $form->createView(),
@@ -73,25 +73,25 @@ class EmployeesController extends AbstractController
        ]);
     }
 
-//     #[Route('/updatestudentdata/{id}',name:'updatestudentdata')]
-//     public function UpdateEmployee($id,Request $request)
-//     {
-//         $studentdata =  $this->StudentRepo->find($id);
-//         $studentsdata =  $this->StudentRepo->FindStudentDataWithOtherFeilds();
+ #[Route('/updateemployeedata/{id}',name:'updateemployeedata')]
+    public function UpdateStudent($id,Request $request)
+    {
+        $employeedata =  $this->EmployeeRepo->find($id);
+        
+        $employeesdata =  $this->EmployeeRepo->FindEmployeeDataWithOtherFeilds();
 
-//         $form = $this->createForm(StudentFormType::class,$studentdata);
-//         $form->handleRequest($request);
+        $form = $this->createForm(EmployeesFormType::class,$employeedata);
+        $form->handleRequest($request);
 
-//       if($form->isSubmitted() && $form->isValid())
-//       {
-//          $studentdata->setAdmissionNumber($form->get('Admission_Number')->getdata());
-//          $this->em->flush();
-//           return $this->redirectToRoute('createstudent');
+      if($form->isSubmitted() && $form->isValid())
+      {
+         $this->em->flush();
+          return $this->redirectToRoute('createemployee');
      
-//       }
-//         return $this->render('classes/AddClass.html.twig',[
-//         'form' => $form->createView(),
-//         'student_data' => $studentsdata, 
-//        ]);
-//     }
+      }
+        return $this->render('employees/AddEmployee.html.twig',[
+        'form' => $form->createView(),
+        'employee_data' => $employeesdata, 
+       ]);
+    }
 }

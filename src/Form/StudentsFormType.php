@@ -2,22 +2,21 @@
 
 namespace App\Form;
 
-use App\Entity\Student;
-use App\Entity\Classes;
+use App\Entity\Students;
 use App\Entity\Users;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Classes;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
-class StudentFormType extends AbstractType
+class StudentsFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Admission_Number',TextType::class,
+           ->add('Admission_Number',TextType::class,
             [
             'label'=>'Admission Number',
                 'attr'=>array(
@@ -25,10 +24,17 @@ class StudentFormType extends AbstractType
                 ),
                  'required'=>false
             ])
-             
-            ->add("inputName",TextType::class, array("mapped"=>false, "label"=>'Student Name'))
 
-            ->add('classId', EntityType::class,[
+           ->add('Name',TextType::class,
+            [
+            'label'=>'Student Name',
+                'attr'=>array(
+                    'style'=>'width:300px;height:40px;'
+                ),
+                 'required'=>false
+            ])
+
+            ->add('class', EntityType::class,[
                 'class'=> Classes::class,
                 'mapped' =>true,
                 'choice_label' => function($choice){
@@ -40,16 +46,13 @@ class StudentFormType extends AbstractType
                     'label'=>'Student Class'
                 )
             ]);
-                 
-            //->add('Student_Name')
-           
-        ;
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Student::class,
+            'data_class' => Students::class,
         ]);
     }
 }

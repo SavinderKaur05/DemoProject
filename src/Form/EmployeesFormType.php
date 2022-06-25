@@ -2,35 +2,38 @@
 
 namespace App\Form;
 
-use App\Entity\Users;
-use App\Entity\Classes;
-use App\Entity\Employee;
+use App\Entity\Employees;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
-class EmployeeFormType extends AbstractType
+class EmployeesFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
+         $builder
            ->add('EmployeeCode',TextType::class,
             [
             'label'=>'Employee Code',
                 'attr'=>array(
-                    'style'=>'width:300px;height:40px;',
-                    'required'=>false
+                    'style'=>'width:300px;height:40px;'
                 ),
                  'required'=>false
             ])
-             
-            ->add("inputName",TextType::class, array("mapped"=>false, "label"=>'Employee Name'))
 
-           ->add('role', ChoiceType::class,
+           ->add('Name',TextType::class,
+            [
+            'label'=>'Employee Name',
+                'attr'=>array(
+                    'style'=>'width:300px;height:40px;'
+                ),
+                 'required'=>false
+            ])
+
+             ->add('role', ChoiceType::class,
             [
             'mapped' =>false,
              'choices'  => 
@@ -41,13 +44,12 @@ class EmployeeFormType extends AbstractType
              ],
             
             );
-            
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Employee::class,
+            'data_class' => Employees::class,
         ]);
     }
 }

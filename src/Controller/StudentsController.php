@@ -5,10 +5,10 @@
 namespace App\Controller;
 
 use App\Entity\Classes;
-use App\Entity\Student;
+use App\Entity\Students;
 use App\Entity\Users;
-use App\Form\StudentFormType;
-use App\Repository\StudentRepository;
+use App\Form\StudentsFormType;
+use App\Repository\StudentsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +22,7 @@ class StudentsController extends AbstractController
      private $StudentRepo;
      private $em;
 
-    public function __construct(StudentRepository $StudentRepo, EntityManagerInterface $em)
+    public function __construct(StudentsRepository $StudentRepo, EntityManagerInterface $em)
     {
       $this->em = $em;
       $this->StudentRepo= $StudentRepo;
@@ -44,16 +44,15 @@ class StudentsController extends AbstractController
     #[Route('/createstudent', name: 'createstudent')]
     public function create(Request $request): Response
     {
-      $Student = new Student();
-      $form = $this->createForm(StudentFormType::class,$Student);
+      $Student = new Students();
+      $form = $this->createForm(StudentsFormType::class,$Student);
 
       $form->handleRequest($request);
       
       if($form->isSubmitted() && $form->isValid())
       {
         $student = $form->getData();
-        $studentname= $form->get('inputName')->getData();
-         $this->StudentRepo->SaveStudent($student,$studentname);
+         $this->StudentRepo->SaveStudent($student);
 
           return $this->redirectToRoute('createstudent');
       }
@@ -77,7 +76,7 @@ class StudentsController extends AbstractController
         $this->em->flush();
         return $this->redirectToRoute('createstudent');
         
-        $form = $this->createForm(StudentFormType::class);
+        $form = $this->createForm(StudentsFormType::class);
 
         return $this->render('students/AddStudent.html.twig',[
         'form' => $form->createView(),
@@ -90,9 +89,10 @@ class StudentsController extends AbstractController
     public function UpdateStudent($id,Request $request)
     {
         $studentdata =  $this->StudentRepo->find($id);
+        
         $studentsdata =  $this->StudentRepo->FindStudentDataWithOtherFeilds();
 
-        $form = $this->createForm(StudentFormType::class,$studentdata);
+        $form = $this->createForm(StudentsFormType::class,$studentdata);
         $form->handleRequest($request);
 
       if($form->isSubmitted() && $form->isValid())
@@ -102,7 +102,7 @@ class StudentsController extends AbstractController
           return $this->redirectToRoute('createstudent');
      
       }
-        return $this->render('classes/AddClass.html.twig',[
+        return $this->render('students/AddStudent.html.twig',[
         'form' => $form->createView(),
         'student_data' => $studentsdata, 
        ]);

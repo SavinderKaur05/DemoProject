@@ -45,8 +45,8 @@ class ClassesRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection(); 
 
-        $sql = 'SELECT classes.id,  classes.name, COUNT(student.class_id_id) AS studentCount FROM classes 
-            LEFT JOIN student  ON classes.id = student.class_id_id GROUP BY classes.id';
+        $sql = 'SELECT classes.id,  classes.name, COUNT(students.class_id) AS studentCount FROM classes 
+            LEFT JOIN students  ON classes.id = students.class_id GROUP BY classes.id';
 
         $stmt = $conn->prepare($sql);
 
