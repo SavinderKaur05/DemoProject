@@ -2,8 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Classes;
 use App\Entity\Student;
+use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +40,24 @@ class StudentRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function FindStudentDataWithOtherFeilds()
+    {
+        $conn = $this->getEntityManager()->getConnection(); 
+        // "SELECT students.StudentId,students.ClassId, Students.Admission_Number, users.username,
+        //  classtable.Name FROM users JOIN students ON users.UserId=students.UserId JOIN classtable 
+        //  on classtable.ClassId = students.ClassId;"
+
+        $sql = 'SELECT student.Id,student.class_id_id, student.Admission_Number, users.user_name AS username,
+        classes.name FROM users JOIN student ON users.Id=student.user_id_id JOIN classes ON 
+        classes.Id = student.class_id_id';
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+         return $resultSet->fetchAllAssociative();
     }
 
 //    /**

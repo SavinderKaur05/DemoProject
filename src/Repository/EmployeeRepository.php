@@ -39,6 +39,24 @@ class EmployeeRepository extends ServiceEntityRepository
         }
     }
 
+
+
+      public function FindEmployeeDataWithOtherFeilds()
+    {
+        $conn = $this->getEntityManager()->getConnection(); 
+        // "SELECT students.StudentId,students.ClassId, Students.Admission_Number, users.username,
+        //  classtable.Name FROM users JOIN students ON users.UserId=students.UserId JOIN classtable 
+        //  on classtable.ClassId = students.ClassId;"
+
+        $sql = 'SELECT employee.Id, employee.employee_code, users.name, users.role FROM users JOIN employee ON users.Id=employee.user_id_id';
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+         return $resultSet->fetchAllAssociative();
+    }
+
 //    /**
 //     * @return Employee[] Returns an array of Employee objects
 //     */

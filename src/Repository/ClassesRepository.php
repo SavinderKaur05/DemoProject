@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Classes;
+use App\Entity\Student;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +39,21 @@ class ClassesRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function FindClassesByStudentCount()
+    {
+        $conn = $this->getEntityManager()->getConnection(); 
+
+        $sql = 'SELECT classes.id,  classes.name, COUNT(student.class_id_id) AS studentCount FROM classes 
+            LEFT JOIN student  ON classes.id = student.class_id_id GROUP BY classes.id';
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+         return $resultSet->fetchAllAssociative();
+
     }
 
 //    /**

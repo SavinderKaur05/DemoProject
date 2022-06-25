@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Classes;
+use App\Entity\Student;
+use App\Entity\Users;
 use App\Form\ClassFormType;
 use App\Repository\ClassesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,7 +52,7 @@ class ClassesController extends AbstractController
         return $this->redirectToRoute('create');
       }
 
-      $classesdata =  $this->classRepo->findAll();
+       $classesdata =  $this->classRepo->FindClassesByStudentCount();
 
        return $this->render('classes/AddClass.html.twig',[
         'form' => $form->createView(),
@@ -63,7 +65,8 @@ class ClassesController extends AbstractController
     public function DeleteClass($id)
     {
         $classdata =  $this->classRepo->find($id);
-        $classesdata =  $this->classRepo->findAll();
+
+        $classesdata =  $this->classRepo->FindClassesByStudentCount();
 
         $this->classRepo->remove($classdata);
         $this->em->flush();
@@ -82,7 +85,7 @@ class ClassesController extends AbstractController
     public function UpdateClass($id,Request $request)
     {
         $classdata =  $this->classRepo->find($id);
-        $classesdata =  $this->classRepo->findAll();
+        $classesdata =  $this->classRepo->FindClassesByStudentCount();
         $form = $this->createForm(ClassFormType::class,$classdata);
         $form->handleRequest($request);
 
@@ -90,12 +93,12 @@ class ClassesController extends AbstractController
       {
          $classdata->setName($form->get('Name')->getdata());
          $this->em->flush();
+          return $this->redirectToRoute('create');
+     
       }
         return $this->render('classes/AddClass.html.twig',[
         'form' => $form->createView(),
-        'class_data' => $classesdata,
-
+        'class_data' => $classesdata, 
        ]);
-
     }
 }

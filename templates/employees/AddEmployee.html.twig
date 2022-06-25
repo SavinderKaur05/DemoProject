@@ -1,14 +1,47 @@
  {% extends 'base.html.twig' %}
 
- {% block title %}Employee{% endblock %}
+{% block title %}Employee{% endblock %}
 
-{% block Content %}
-  
-    <div class="col-lg-10 col-sm-10 col-md-10">
+{% block MainContent %}
   <h1 style="text-align:center; ">Add Employee</h1>
+  <div class="form">
+  {{ form_start(form) }}
+      {{ form_widget(form) }}
      
-     {{ controller_name}}
-   
-  </div>
+    <div class="form-group" style="padding-top:20px;">
+     <button type="submit" class="btn btn-info">Submit</button>
+    </div>
+   {{ form_end(form) }}
+   </div>
+
+   <div class="container" style="margin-left:20px;padding-top:30px;">       
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Emplyee Code</th>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+     {% for data in employee_data %}
+        
+      <tr>
+        <td>{{data.employee_code}}</td>
+        <td>{{ data.name }}</td>  
+       <td>{{data.role}}</td>  
+        <td><button type="button"  class="btn btn-success" value="Edit" /><a href="/updatedata/{{ data.Id }}">Edit</a></td>
+        <td><button type="button" class="btn btn-warning"><a href="/deleteemployeedata/{{ data.Id }}">Delete</a></button></td>
+      </tr>
+
+     {% endfor %}
+
+
+    </tbody>
+  </table>
+</div>
+
 
 {% endblock %}

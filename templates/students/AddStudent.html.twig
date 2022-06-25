@@ -1,5 +1,47 @@
  {% extends 'base.html.twig' %}
 
-{% block title %}Students{% endblock %}
+{% block title %}Student{% endblock %}
+
+{% block MainContent %}
+  <h1 style="text-align:center; ">Add Student</h1>
+  <div class="form">
+  {{ form_start(form) }}
+      {{ form_widget(form) }}
+     
+    <div class="form-group" style="padding-top:20px;">
+     <button type="submit" class="btn btn-info">Submit</button>
+    </div>
+   {{ form_end(form) }}
+   </div>
+
+   <div class="container" style="margin-left:20px;padding-top:30px;">       
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Admission Number</th>
+        <th>Name</th>
+        <th>Class</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+     {% for data in student_data %}
+        
+      <tr>
+        <td>{{data.Admission_Number}}</td>
+           <td>{{ data.username }}</td>  
+           <td>{{data.name}}</td>  
+        <td><button type="button"  class="btn btn-success" value="Edit" /><a href="/updatedata/{{ data.Id }}">Edit</a></td>
+        <td><button type="button" class="btn btn-warning"><a href="/deletestudentdata/{{ data.Id }}">Delete</a></button></td>
+      </tr>
+
+     {% endfor %}
 
 
+    </tbody>
+  </table>
+</div>
+
+
+{% endblock %}
