@@ -35,7 +35,7 @@ class EmployeesFormType extends AbstractType
 
              ->add('role', ChoiceType::class,
             [
-            'mapped' =>false,
+            'mapped' =>true,
              'choices'  => 
              [
              'Teacher' => 'Teacher',
