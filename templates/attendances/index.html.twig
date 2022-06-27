@@ -2,19 +2,66 @@
 
 {% block title %}Hello AttendancesController!{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block MainContent %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+   <form action={{ path('showlist') }} method="POST">
+     <fieldset Style="border:3px solid;width:auto;">
+        <legend Style="width:auto;margin-left: 20px;">Selection Options</legend>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/savin/DemoProject/src/Controller/AttendancesController.php'|file_link(0) }}">src/Controller/AttendancesController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/savin/DemoProject/templates/attendances/index.html.twig'|file_link(0) }}">templates/attendances/index.html.twig</a></code></li>
-    </ul>
-</div>
+        <div Style="display:flex;"> 
+          <div>
+             <Select  name="ClassId" value="ClassId" Style="width:500px;height:50px;">
+               {% for data in class_data %}
+                  <option value="{{ data.Id }}">{{ data.name }}</option>
+               {% endfor %}
+             </Select>
+          </div>
+           <div class="form-group" Style="margin-left:100px;">
+                 <input type="date" id="Date" name="Date" value="Date" Style="width:300px;height:50px;">
+                 
+            </div>
+
+
+           <div class="form-group" Style="margin-left:80px;">
+             <input type="submit"  class="btn btn-info" id="click" name="click"  value="Show List" Style="width:300px;height:50px;">
+           </div>
+        <div>
+     </fieldset>
+   </form>
+
+<form action="SaveAttendance", method="POST" ,dataType: "json">
+ {% if student_data %}
+   <div class="table-responsive">  
+           <table class="table table-bordered table-striped">  
+                <tr>    
+                     <th Style="background-color:lightgrey">Adm No</th> 
+                     <th Style="background-color:lightgrey">Name</th>  
+                     <th Style="background-color:lightgrey">Class</th>
+                      <th Style="background-color:lightgrey;width:200px;height:30px;">Status</th> 
+                </tr>
+                  {% for data in student_data %}
+                   <input type="hidden" name="StudentId[]" value="{{data.Id}}" />
+                   <input type="hidden" name="ClassId[]" value="{{data.class_id}}" /> 
+                  <input type="hidden" name="Date" value="{{Date}}" /> 
+                  <tr>
+                     <td>{{ data.Admission_Number }}</td> 
+                     <td>{{ data.StuName }}</td> 
+                     <td>{{ data.name }}</td> 
+                     <td>
+                         <select name="status[]" Style="width:300px;height:40px;">
+                              <option disabled selected></option> 
+                              <option value="Present">Present</option>
+                              <option value="Absent">Absent</option>
+                         </select>
+                     </td> 
+                  </tr> 
+                  {% endfor %}
+            </table>
+            <div class="form-group" Style="margin-left:80px;">
+                 <input type="submit"  class="btn btn-info" id="click" name="click"  value="Save Attendance" Style="width:300px;height:50px;">
+    </div>
+    </div>
+    {% endif %}
+
+</form>
 {% endblock %}

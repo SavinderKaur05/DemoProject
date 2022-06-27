@@ -89,16 +89,19 @@ class StudentsRepository extends ServiceEntityRepository
     {
         try
         {
-      $this->getEntityManager()->beginTransaction();
+        
+       $this->getEntityManager()->beginTransaction();
        $user = new Users();
        $user->setUserName($student->getName()."@123");
-       $user->setPassword("123");
+       $user->setPassword($student->getName()."1237");
 
          $this->em->persist($user);
          $this->em->flush();
 
+       // dd($user);
          $student->setUser($user);
           $this->em->persist($student);
+         
          $this->em->flush();
          
          $this->getEntityManager()->commit();
@@ -108,6 +111,26 @@ class StudentsRepository extends ServiceEntityRepository
           $this->getEntityManager()->rollback();
         }
 
+    }
+
+    public function GetByClassId(int $id)
+    {
+        $conn = $this->getEntityManager()->getConnection(); 
+
+        // $sql="SELECT b.id,b.class_id, b.Admission_Number, b.name as StuName, 
+        // a.Name FROM classes a JOIN students b on b.class_Id = '$id'
+        // GROUP BY b.id"
+        
+        $sql="SELECT students.Id,students.class_id, students.Admission_Number,students.name as StuName, classes.name
+         FROM students JOIN classes ON classes.Id = '$id' Where students.class_id = '$id';";
+    
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+  
+
+         return $resultSet->fetchAllAssociative(); 
     }
 
 //    /**

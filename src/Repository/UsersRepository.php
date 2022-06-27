@@ -39,6 +39,20 @@ class UsersRepository extends ServiceEntityRepository
         }
     }
 
+    public function FindByUsername(string $user,string $pass)
+    {
+
+        $conn = $this->getEntityManager()->getConnection(); 
+
+       $sql="SELECT * from users Where users.user_name = '$user' AND users.password = '$pass'";
+      
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+         return $resultSet->fetchAllAssociative(); 
+    }
+
 //    /**
 //     * @return Users[] Returns an array of Users objects
 //     */
