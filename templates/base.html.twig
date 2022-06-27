@@ -31,6 +31,10 @@
       {% block Content %}
           <div class="column side" >
             {% block Sidenav %}
+
+            {% for item in app.user.roles %}
+              
+              {% if item=="ROLE_ADMIN" %}
                <ul class="list-unstyled components">
                 <li>
                   <a href="/create">Add Class</a>
@@ -39,8 +43,22 @@
                  <a href="/createstudent">Add Student</a>
                 </li>
                 <li> <a href="/createemployee">Add Employee</a></li>
+                <li>
+                    <a href="/{{app.user ? 'logout':'login'}}">{{app.user ? 'Logout':'Login'}}</a>
+                </li>
+
+              {% endif %}
+              {% if item=="ROLE_TEACHER" %}
+
                 <li><a href="/attendances">Take Attendance</a></li>
+                <li><a href="/showattendances">Show Attendance</a></li>
+               
                </ul>
+                <li>
+                    <a href="/{{app.user ? 'logout':'login'}}">{{app.user ? 'Logout':'Login'}}</a>
+                </li>
+               {% endif %}
+            {% endfor %}
             {% endblock %}
             </div>
 

@@ -40,12 +40,23 @@ class AttendancesController extends AbstractController
        ]);
     }
 
+      #[Route('/showattendances', name: 'showattendances')]
+    public function showdat(Request $request): Response
+    {   
+         $class_data=$this->classrepo->findAll();
+
+       return $this->render('attendances/showattendance.html.twig',[
+        'class_data' => $class_data,
+        'student_data' => 0,
+       ]);
+    }
+
    #[Route('/showlist',name:'showlist')]
    public function ShowList(Request $request):Response
    {
       $class_data=$this->classrepo->findAll();
 
-     $classId = $request->request->get('ClassId');
+      $classId = $request->request->get('ClassId');
         
       $Date = $request->request->get('Date');
 
@@ -72,8 +83,6 @@ class AttendancesController extends AbstractController
       $Date=   $array['Date'];
   
       $date=new DateTime($Date);
-       //$Date = DateTime::createFromFormat('Y/m/d', $Date);
-     // dd($Date);
 
       for($i = 0; $i<count($Student); $i++)
       {
@@ -87,7 +96,7 @@ class AttendancesController extends AbstractController
         $this->em->persist($Attendence);
         $this->em->flush();
         $classId=$Class[$i];
-
+        $Attendence = null;
       }   
 
       $class_data=$this->classrepo->findAll();
@@ -99,6 +108,26 @@ class AttendancesController extends AbstractController
         'class_data' => $class_data,
         'Date'=>$Date
          ]);
+   }
+
+    #[Route('/ShowAttedanceList',name:'ShowAttedanceList')]
+   public function ShowAttedanceList(Request $request):Response
+   {
+
+    $class_data=$this->classrepo->findAll();
+
+    $classId = $request->request->get('ClassId');
+        
+    $Date = $request->request->get('Date');
+    
+    $student_List = $this->AttRepo->GetAttendanceByDateAndClassId($classId,$Date);    
+
+      return $this->render('attendances/showattendance.html.twig',[
+        'student_data' => $student_List,
+        'class_data' => $class_data,
+        'Date' => $Date
+       ]);
+
    }
 
     

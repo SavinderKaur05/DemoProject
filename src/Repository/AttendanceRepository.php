@@ -39,28 +39,18 @@ class AttendanceRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Attendance[] Returns an array of Attendance objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function GetAttendanceByDateAndClassId(int $classId,string $date)
+    {
+        $conn = $this->getEntityManager()->getConnection(); 
 
-//    public function findOneBySomeField($value): ?Attendance
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $sql = "SELECT students.name AS StuName, students.Admission_Number , classes.name , attendance.Status FROM
+         students JOIN classes JOIN attendance ON attendance.class_id = classes.Id AND
+         attendance.student_id = students.id WHERE attendance.class_id = '$classId' AND attendance.date = '$date';";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+         return $resultSet->fetchAllAssociative();
+    }
 }

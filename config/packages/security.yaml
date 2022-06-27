@@ -21,6 +21,7 @@ security:
             custom_authenticator: App\Security\LoginFormAuthenticator
             logout:
                 path: app_logout
+                target: login
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -33,5 +34,17 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/create, roles: ROLE_ADMIN }
+        - { path: ^/deletedata, roles: ROLE_ADMIN }
+        - { path: ^/updatedata, roles: ROLE_ADMIN }
+        - { path: ^/createemployee, roles: ROLE_ADMIN }
+        - { path: ^/deleteemployeedata, roles: ROLE_ADMIN }
+        - { path: ^/updateemployeedata, roles: ROLEROLE_ADMIN_USER }
+        - { path: ^/createstudent, roles: ROLE_ADMIN }
+        - { path: ^/deletestudentdata, roles: ROLE_ADMIN }
+        - { path: ^/updatestudentdata, roles: ROLE_ADMIN }
+        - { path: ^/attendances, roles: ROLE_TEACHER }
+        - { path: ^/showattendances, roles: ROLE_TEACHER }
+        - { path: ^/showlist, roles: ROLE_TEACHER }
+        - { path: ^/SaveAttendance, roles: ROLE_TEACHER }
+        - { path: ^/ShowAttedanceList, roles: ROLE_TEACHER }

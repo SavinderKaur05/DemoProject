@@ -6,7 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Classes;
 use App\Entity\Students;
-use App\Entity\Users;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Id;
@@ -91,9 +91,11 @@ class StudentsRepository extends ServiceEntityRepository
         {
         
        $this->getEntityManager()->beginTransaction();
-       $user = new Users();
+       $user = new User();
        $user->setUserName($student->getName()."@123");
        $user->setPassword($student->getName()."1237");
+       $roles[] = 'ROLE_STUDENT';
+       $user->setRoles($roles);
 
          $this->em->persist($user);
          $this->em->flush();

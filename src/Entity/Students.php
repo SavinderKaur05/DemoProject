@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\StudentsRepository;
+use App\Entity\User;
+use App\Entity\Classes;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\StudentsRepository;
 
 #[ORM\Entity(repositoryClass: StudentsRepository::class)]
 class Students
@@ -23,7 +25,7 @@ class Students
     #[ORM\JoinColumn(nullable: false)]
     private $class;
 
-    #[ORM\OneToOne(targetEntity: Users::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private $User;
 
@@ -68,12 +70,12 @@ class Students
         return $this;
     }
 
-    public function getUser(): ?Users
+    public function getUser(): ?User
     {
         return $this->User;
     }
 
-    public function setUser(Users $User): self
+    public function setUser(User $User): self
     {
         $this->User = $User;
 

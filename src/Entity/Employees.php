@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\EmployeesRepository;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EmployeesRepository;
 
 #[ORM\Entity(repositoryClass: EmployeesRepository::class)]
 class Employees
@@ -19,7 +20,7 @@ class Employees
     #[ORM\Column(type: 'string', length: 255)]
     private $Name;
 
-    #[ORM\OneToOne(targetEntity: Users::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private $User;
 
@@ -55,12 +56,12 @@ class Employees
         return $this;
     }
 
-    public function getUser(): ?Users
+    public function getUser(): ?User
     {
         return $this->User;
     }
 
-    public function setUser(Users $User): self
+    public function setUser(User $User): self
     {
         $this->User = $User;
 

@@ -1,10 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AttendancesController!{% endblock %}
 
 {% block MainContent %}
-
-   <form action={{ path('showlist') }} method="POST">
+ <form action={{ path('ShowAttedanceList') }} method="POST">
      <fieldset Style="border:3px solid;width:auto;">
         <legend Style="width:auto;margin-left: 20px;">Selection Options</legend>
 
@@ -29,10 +27,7 @@
      </fieldset>
    </form>
 
-<form action={{ path('SaveAttendance') }} method="POST" dataType: "json">
- {% if student_data %}
-   <div class="table-responsive">  
-           <table class="table table-bordered table-striped">  
+     <table class="table table-bordered table-striped">  
                 <tr>    
                      <th Style="background-color:lightgrey">Adm No</th> 
                      <th Style="background-color:lightgrey">Name</th>  
@@ -40,28 +35,14 @@
                       <th Style="background-color:lightgrey;width:200px;height:30px;">Status</th> 
                 </tr>
                   {% for data in student_data %}
-                   <input type="hidden" name="StudentId[]" value="{{data.Id}}" />
-                   <input type="hidden" name="ClassId[]" value="{{data.class_id}}" /> 
                   <input type="hidden" name="Date" value="{{Date}}" /> 
                   <tr>
                      <td>{{ data.Admission_Number }}</td> 
                      <td>{{ data.StuName }}</td> 
                      <td>{{ data.name }}</td> 
-                     <td>
-                         <select name="status[]" Style="width:300px;height:40px;">
-                              <option disabled selected></option> 
-                              <option value="Present">Present</option>
-                              <option value="Absent">Absent</option>
-                         </select>
-                     </td> 
+                     <td>{{ data.Status }}</td> 
                   </tr> 
                   {% endfor %}
             </table>
-            <div class="form-group" Style="margin-left:80px;">
-                 <input type="submit"  class="btn btn-info" id="click" name="click"  value="Save Attendance" Style="width:300px;height:50px;">
-    </div>
-    </div>
-    {% endif %}
 
-</form>
 {% endblock %}

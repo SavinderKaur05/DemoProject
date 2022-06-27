@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Employees;
-use App\Entity\Users;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -68,14 +68,15 @@ class EmployeesRepository extends ServiceEntityRepository
         {
     
        $this->getEntityManager()->beginTransaction();
-       $user = new Users();
+       $user = new User();
        $user->setUserName($employee->getName()."@123");
        $user->setPassword($employee->getName()."1234");
 
          $this->em->persist($user);
          $this->em->flush();
          $employee->setUser($user);
-         $employee->setRole($role);
+         $roles[]=$role;
+         $user->setRoles($roles);
          
         $this->em->persist($employee);
 

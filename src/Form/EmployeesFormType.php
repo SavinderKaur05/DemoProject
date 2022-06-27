@@ -38,8 +38,8 @@ class EmployeesFormType extends AbstractType
             'mapped' =>true,
              'choices'  => 
              [
-             'Teacher' => 'Teacher',
-             'Admin' => 'Admin',
+             'Teacher' => 'ROLE_TEACHER',
+             'Admin' => 'ROLE_ADMIN',
              ],
              ],
             
