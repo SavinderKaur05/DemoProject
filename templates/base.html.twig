@@ -46,17 +46,19 @@
                 <li>
                     <a href="/{{app.user ? 'logout':'login'}}">{{app.user ? 'Logout':'Login'}}</a>
                 </li>
+                <ul>
 
               {% endif %}
               {% if item=="ROLE_TEACHER" %}
-
+                <ul class="list-unstyled components">
                 <li><a href="/attendances">Take Attendance</a></li>
                 <li><a href="/showattendances">Show Attendance</a></li>
                
-               </ul>
+              
                 <li>
                     <a href="/{{app.user ? 'logout':'login'}}">{{app.user ? 'Logout':'Login'}}</a>
                 </li>
+                 </ul>
                {% endif %}
             {% endfor %}
             {% endblock %}

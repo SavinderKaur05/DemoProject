@@ -71,12 +71,14 @@ class EmployeesRepository extends ServiceEntityRepository
        $user = new User();
        $user->setUserName($employee->getName()."@123");
        $user->setPassword($employee->getName()."1234");
+       $roles[]=$role;
+       $user->setRoles($roles);
 
          $this->em->persist($user);
          $this->em->flush();
+      
+
          $employee->setUser($user);
-         $roles[]=$role;
-         $user->setRoles($roles);
          
         $this->em->persist($employee);
 
